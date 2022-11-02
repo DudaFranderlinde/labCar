@@ -1,16 +1,20 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class Motorista {
     @IsNotEmpty()
     @IsString()
+    id: string;
+
+    @IsNotEmpty()
+    @IsString()
     name: string;
 
-    @IsNotEmpty()
-    @IsString()
-    birthDate: string;
+    @IsDate()
+    birthDate: Date;
 
     @IsNotEmpty()
     @IsString()
+    @Length(8)
     cpf: string;
 
     @IsNotEmpty()
@@ -20,4 +24,6 @@ export class Motorista {
     @IsNotEmpty()
     @IsString()
     model: string;
+
+    status: string;
 }
