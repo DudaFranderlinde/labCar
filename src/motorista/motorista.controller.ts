@@ -1,5 +1,4 @@
 import { Controller, Delete, Get, Patch, Post, Put, Query, Body, Param} from "@nestjs/common";
-import { NestResponseBuilder } from "src/core/http/nest-response-builder";
 import { Motorista } from "./motorista.entity";
 import { MotoristaService } from "./motorista.service";
 
@@ -30,8 +29,9 @@ export class MotoristaController{
     }
 
     @Put(':id')
-    public updateMotorista(){
-        
+    public async updateMotorista(@Param() params, @Body() body){
+        //criar um objeto para atulizar motorista
+       return await this.service.updateCadastro(params.id)
     }
 
     @Patch(':id')

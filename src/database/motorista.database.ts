@@ -19,4 +19,8 @@ export class DatabaseMotorista {
       }
       writeFileSync(this.FILENAME, JSON.stringify([...motoristas, motorista]));
     }
+
+    public async gravarListaMotorista(motoristas: Motorista[]) {
+      writeFileSync(this.FILENAME, JSON.stringify(motoristas));
+    }
 }

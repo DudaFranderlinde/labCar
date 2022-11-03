@@ -73,4 +73,12 @@ export class MotoristaService{
       return [];
     }
   }
+
+  public async updateCadastro(id : string){
+    const motoristas = await this.database.getMotoristasBD();
+    const filtrarMotorista = motoristas.filter(elemento=> elemento.id !== id);
+    await this.database.gravarListaMotorista(filtrarMotorista)
+    return filtrarMotorista;
+    
+  }
 }
