@@ -7,7 +7,7 @@ export class DatabaseMotorista {
     private FILENAME = 'motoristas.json';
 
     public async getMotoristasBD(): Promise<Motorista[]> {
-        const motoristasInFile = await readFileSync(this.FILENAME, 'utf-8');
+        const motoristasInFile = readFileSync(this.FILENAME, 'utf-8');
         const motoristas = JSON.parse(motoristasInFile);
         return motoristas;
       }
@@ -17,6 +17,6 @@ export class DatabaseMotorista {
       if (!motoristas) {
         motoristas = [];
       }
-      await writeFileSync(this.FILENAME, JSON.stringify([...motoristas, motorista]));
+      writeFileSync(this.FILENAME, JSON.stringify([...motoristas, motorista]));
     }
 }

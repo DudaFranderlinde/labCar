@@ -5,8 +5,8 @@ import { MotoristaModule } from './motorista/motorista.module';
 import { MotoristaService } from './motorista/motorista.service';
 
 @Module({
-  imports: [],
-  controllers: [MotoristaController],
-  providers: [MotoristaService, DatabaseMotorista],
+  imports: [MotoristaModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

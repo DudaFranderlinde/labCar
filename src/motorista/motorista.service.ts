@@ -1,43 +1,73 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { DatabaseMotorista } from "src/database/motorista.database";
 import { Motorista } from "./motorista.entity";
+import {v4 as uuidV4} from 'uuid'
+import { Status } from "./status-motorista.enum";
 
- let motorista : Motorista[] = [];
+ //let motorista : Motorista[] = [];
 
 @Injectable()
 export class MotoristaService{
   constructor(private database: DatabaseMotorista) {}
 
   public async createMotorista(motorista: Motorista){
-    const verificaMotorista = await this.verificaMotorista(motorista.cpf)
-
+    const verificaMotorista = await this.verificaCpf(motorista.cpf)
     if(verificaMotorista){
       throw new ConflictException({
         statusCode: 409,
-        message: 'CPF já cadastrado como motorista',
+        message: 'CPF já está cadastrado como motorista',
       });
     }
+
+    const verificaIdade = await this.verificaDataNasc(motorista.birthDate)
+    if(verificaIdade < 18){
+      throw new HttpException(`Motorista precisa ser maior de idade`, HttpStatus.UNAUTHORIZED);
+    }
+    motorista.id = uuidV4();
+    motorista.status = Status.ALLOWED;
 
     await this.database.salvar(motorista);
     return motorista;
   }
 
-  public async verificaMotorista(cpf: string) {
-    const cervejas = await this.database.getMotoristasBD();
-    return cervejas.find(
-      (cerveja) => cerveja.cpf.toLowerCase() == cpf.toLowerCase(),
+  public async verificaCpf(cpf: number) {
+    const motoristas = await this.database.getMotoristasBD();
+    return motoristas.find(
+      (motorista) => motorista.cpf == cpf
     );
   }
-   
-  public getListaMotoristas(nome: string, page: number, size: number){
+
+  public async verificaDataNasc(dataNasc: string){
+    const data = new Date(dataNasc)
+    const dataAtual = new Date()
+    const idade = dataAtual.getFullYear() - data.getFullYear()
+
+    return idade;
+    
+  }
+
+  public async getMotoristaCPF(cpf: number) {
+    const motoristas = await this.database.getMotoristasBD();
+    const findMotorista = motoristas.find(
+      (motorista) => motorista.cpf == cpf
+    );
+
+    if (!findMotorista) {
+      throw new HttpException(`Motorista CPF ${cpf} não encontrado`, HttpStatus.NOT_FOUND)
+    }
+   return findMotorista
+  }
+
+  public async getListaMotoristas(page: number, size: number){
     const indiceInicial = page * size;
     const indiceFinal = indiceInicial + size;
-      
-    if (motorista.length > indiceInicial) {
-        if (motorista.length > indiceFinal) {
-          return motorista.slice(indiceInicial, indiceFinal);
+    
+    const motoristas = await this.database.getMotoristasBD()
+    if (motoristas.length > indiceInicial) {
+        if (motoristas.length > indiceFinal) {
+          return motoristas.slice(indiceInicial, indiceFinal);
         } else {
-          return motorista.slice(indiceInicial, motorista.length - 1);
+          return motoristas.slice(indiceInicial, motoristas.length - 1);
         }
     } else {
       return [];
