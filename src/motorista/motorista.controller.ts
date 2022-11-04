@@ -30,7 +30,7 @@ export class MotoristaController{
 
     @Put(':id')
     public async updateMotorista(@Param() params, @Body() body){
-        //criar um objeto para atulizar motorista
+        //criar um objeto para atulizar motorista dto
        return await this.service.updateCadastro(params.id)
     }
 
@@ -40,7 +40,7 @@ export class MotoristaController{
     }
 
     @Delete(':id')
-    public deleteMotorista(){
-
+    public async deleteMotorista(@Param() params){
+        return await this.service.deleteMotorista(params.id)
     }
 }
