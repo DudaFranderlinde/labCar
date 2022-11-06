@@ -1,4 +1,8 @@
-import { Controller, Delete, Get, Patch, Post, Put, Query, Body, Param} from "@nestjs/common";
+import { Controller, Delete, Get, Patch, Post, Put, Query, Body, Param, HttpStatus, NotFoundException} from "@nestjs/common";
+import { NestResponse } from "src/core/http/nest-response";
+import { NestResponseBuilder } from "src/core/http/nest-response-builder";
+import { updateMotoristaDto } from "src/dto/updateMotoristaDto";
+import { updateStatusMotoristaDto } from "src/dto/updateStatusMotoristaDto";
 import { Motorista } from "./motorista.entity";
 import { MotoristaService } from "./motorista.service";
 
@@ -9,38 +13,46 @@ export class MotoristaController{
     @Get()
     public async getMotoristas(@Query('name') name = "", @Query('page') page = 0, @Query('size') size = 10) {
         const motorista = await this.service.getListaMotoristas(page,size)
-        if(name !== "" && typeof name === 'string'){
-            return motorista.filter(elemento => elemento.name.toLowerCase() == name.toLowerCase())
+        
+        if(name !== ""){
+           return await this.service.getMotoristaName(name)
         }
         return motorista;
     }
 
     @Get(':cpf')
-    public getDetalhes(@Param() params) {
-       const motorista = this.service.getMotoristaCPF(params.cpf); 
+    public getDetalhes(@Param('cpf') cpf) {
+       const motorista = this.service.getMotoristaCPF(cpf); 
        return motorista;
     }
 
     @Post()
-    public async createdMotorista(@Body() motorista: Motorista){
+    public async createdMotorista(@Body() motorista: Motorista): Promise<NestResponse>{
         const motoristaCriado = await this.service.createMotorista(motorista)
-        console.log(motoristaCriado);
-        return motoristaCriado;
+
+        return new NestResponseBuilder()
+        .withStatus(HttpStatus.CREATED)
+        .withHeaders({ Location: `/motorista/${motoristaCriado.name}` })
+        .withBody(motoristaCriado)
+        .build();
     }
 
     @Put(':id')
-    public async updateMotorista(@Param() params, @Body() body){
-        //criar um objeto para atulizar motorista dto
-       return await this.service.updateCadastro(params.id)
+    public async updateMotorista(@Param('id') id, @Body() body: updateMotoristaDto){
+        const updateMotorista = await this.service.updateCadastro(id, body.name, body.licensePlate, body.model)
+        return updateMotorista;
     }
 
     @Patch(':id')
-    public updateStatusMotorista(){
-
+    public async updateStatusMotorista(@Param('id') id, @Body() body : updateStatusMotoristaDto){
+        const updateStatusMotorista = await this.service.updateStatus(id, body.status)
+        return updateStatusMotorista;
     }
 
     @Delete(':id')
     public async deleteMotorista(@Param() params){
-        return await this.service.deleteMotorista(params.id)
+        const motoristas = await this.service.getMotoristaID(params.id)
+        await this.service.deleteMotorista(params.id)
+        return motoristas;
     }
 }

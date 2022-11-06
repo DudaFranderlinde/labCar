@@ -1,4 +1,4 @@
 export enum Status {
-    BLOCKED,
-    ALLOWED,
+    BLOCKED = "BLOCKED",
+    ALLOWED = "ALLOWED",
 }
