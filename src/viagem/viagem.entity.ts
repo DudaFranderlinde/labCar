@@ -9,6 +9,9 @@ export class Viagem {
     @IsString()
     idPassageiro: string;
 
+    @IsString()
+    idMotorista: string;
+
     @IsEnum(Status)
     status: Status;
 

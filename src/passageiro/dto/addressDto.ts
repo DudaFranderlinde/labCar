@@ -1,9 +1,9 @@
-import { IsNotEmpty, IsNumberString, IsOptional, IsString, Length, MinLength } from "class-validator";
+import { IsNotEmpty, IsNumberString, IsString, Length, MinLength } from "class-validator";
 
 export class addressDto {
     @IsString()
     @IsNotEmpty()
-    @MinLength(5, {message: 'street must be longer than or equal to 5 characters'})
+    @MinLength(5)
     "street": string;
 
     @IsNotEmpty()
@@ -13,20 +13,16 @@ export class addressDto {
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(4, {message: 'neighborhood must be longer than or equal to 4 characters'})
+    @MinLength(4)
     "neighborhood": string;
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(4, {message: 'city must be longer than or equal to 4 characters'})
+    @MinLength(4)
     "city": string;
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(2, {message: 'state must be longer than or equal to 2 characters'})
+    @MinLength(2)
     "state": string;
-
-    @IsOptional()
-    @IsString()
-    "complement"?: string;
 }

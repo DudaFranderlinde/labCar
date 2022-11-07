@@ -98,8 +98,8 @@ export class PassageiroService {
     public async deletePassageiro(id : string){
       const viagens = await this.viagens.getViagensBD();
 
-      const findViagem = viagens.find(passageiro=> passageiro.id === id);
-      if (!findViagem) {
+      const findViagem = viagens.find(passageiro=> passageiro.idPassageiro === id);
+      if (findViagem) {
         throw new ConflictException({
           statusCode: 409,
           message: 'Passenger is registered on a trip',

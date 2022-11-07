@@ -27,6 +27,7 @@ export class ViagemService {
         
         viagem.idPassageiro = viagem.idPassageiro;
         viagem.id = uuidV4();
+        viagem.idMotorista = "";
         viagem.status = Status.CREATED;
         viagem.origin = viagem.origin;
         viagem.whither = viagem.whither;
