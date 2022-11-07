@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString, Length, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, Length, Matches, MaxLength } from 'class-validator';
 import { cpfValidation, dateValidation, licensePlateValidation } from 'src/utils/regex';
 import { Status } from './status-motorista.enum';
 
@@ -33,5 +33,4 @@ export class Motorista {
     @IsNotEmpty()
     @IsString()
     model: string;
-    
 }

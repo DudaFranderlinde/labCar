@@ -3,10 +3,26 @@ import { DatabaseMotorista } from "src/database/motorista.database";
 import { Motorista } from "./motorista.entity";
 import {v4 as uuidV4} from 'uuid'
 import { Status } from "./status-motorista.enum";
+import { updateMotoristaDto } from "src/motorista/dto/updateMotoristaDto";
 
 @Injectable()
 export class MotoristaService{
   constructor(private database: DatabaseMotorista) {}
+
+  public async verificaCpf(cpf: string) {
+    const motoristas = await this.database.getMotoristasBD();
+    return motoristas.find(
+      (motorista) => motorista.cpf == cpf
+    );
+  }
+
+  public async verificaDataNasc(dataNasc: string){
+    const data = new Date(dataNasc)
+    const dataAtual = new Date()
+    const idade = dataAtual.getFullYear() - data.getFullYear()
+
+    return idade;
+  }
 
   public async createMotorista(motorista: Motorista){
     const verificaMotorista = await this.verificaCpf(motorista.cpf)
@@ -27,22 +43,6 @@ export class MotoristaService{
 
     await this.database.salvar(motorista);
     return motorista;
-  }
-
-  public async verificaCpf(cpf: string) {
-    const motoristas = await this.database.getMotoristasBD();
-    return motoristas.find(
-      (motorista) => motorista.cpf == cpf
-    );
-  }
-
-  public async verificaDataNasc(dataNasc: string){
-    const data = new Date(dataNasc)
-    const dataAtual = new Date()
-    const idade = dataAtual.getFullYear() - data.getFullYear()
-
-    return idade;
-    
   }
 
   public async getMotoristaCPF(cpf: string) {
@@ -104,14 +104,14 @@ export class MotoristaService{
     }
   }
 
-  public async updateCadastro(id : string, nome : string, licensePlate : string , model : string){
+  public async updateCadastro(id : string, update : updateMotoristaDto){
     const motoristas = await this.database.getMotoristasBD();
     const motorista = await this.getMotoristaID(id)
  
     motorista.id = id;
-    motorista.name = nome;
-    motorista.licensePlate = licensePlate;
-    motorista.model = model;
+    motorista.name = update.name;
+    motorista.licensePlate = update.licensePlate;
+    motorista.model = update.model;
  
     const filtrarMotorista = motoristas.filter(elemento=> elemento.id !== id);
     await this.database.gravarListaMotorista(filtrarMotorista);

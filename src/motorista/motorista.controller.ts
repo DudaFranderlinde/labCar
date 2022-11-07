@@ -1,12 +1,12 @@
-import { Controller, Delete, Get, Patch, Post, Put, Query, Body, Param, HttpStatus, NotFoundException} from "@nestjs/common";
+import { Controller, Delete, Get, Patch, Post, Put, Query, Body, Param, HttpStatus } from "@nestjs/common";
 import { NestResponse } from "src/core/http/nest-response";
 import { NestResponseBuilder } from "src/core/http/nest-response-builder";
-import { updateMotoristaDto } from "src/dto/updateMotoristaDto";
-import { updateStatusMotoristaDto } from "src/dto/updateStatusMotoristaDto";
+import { updateMotoristaDto } from "src/motorista/dto/updateMotoristaDto";
+import { updateStatusMotoristaDto } from "src/motorista/dto/updateStatusMotoristaDto";
 import { Motorista } from "./motorista.entity";
 import { MotoristaService } from "./motorista.service";
 
-@Controller('motorista')
+@Controller('motoristas')
 export class MotoristaController{
     constructor(private service: MotoristaService){}
 
@@ -26,8 +26,8 @@ export class MotoristaController{
        return motorista;
     }
 
-    @Post()
-    public async createdMotorista(@Body() motorista: Motorista): Promise<NestResponse>{
+    @Post('')
+    public async createMotorista(@Body() motorista: Motorista): Promise<NestResponse>{
         const motoristaCriado = await this.service.createMotorista(motorista)
 
         return new NestResponseBuilder()
@@ -39,7 +39,7 @@ export class MotoristaController{
 
     @Put(':id')
     public async updateMotorista(@Param('id') id, @Body() body: updateMotoristaDto){
-        const updateMotorista = await this.service.updateCadastro(id, body.name, body.licensePlate, body.model)
+        const updateMotorista = await this.service.updateCadastro(id, body)
         return updateMotorista;
     }
 
