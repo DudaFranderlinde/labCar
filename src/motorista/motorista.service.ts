@@ -17,15 +17,15 @@ export class MotoristaService{
   }
 
   public async verificaDataNasc(dataNasc: string){
-    const data = new Date(dataNasc)
-    const dataAtual = new Date()
-    const idade = dataAtual.getFullYear() - data.getFullYear()
+    const data = new Date(dataNasc);
+    const dataAtual = new Date();
+    const idade = dataAtual.getFullYear() - data.getFullYear();
 
     return idade;
   }
 
   public async createMotorista(motorista: Motorista){
-    const verificaMotorista = await this.verificaCpf(motorista.cpf)
+    const verificaMotorista = await this.verificaCpf(motorista.cpf);
     if(verificaMotorista){
       throw new ConflictException({
         statusCode: 409,
@@ -33,7 +33,7 @@ export class MotoristaService{
       });
     }
 
-    const verificaIdade = await this.verificaDataNasc(motorista.birthDate)
+    const verificaIdade = await this.verificaDataNasc(motorista.birthDate);
     if(verificaIdade < 18){
       throw new HttpException(`The driver must be of legal age`, HttpStatus.UNAUTHORIZED);
     }
@@ -52,9 +52,9 @@ export class MotoristaService{
     );
 
     if (!findMotorista) {
-      throw new HttpException(`Driver CPF ${cpf} not found`, HttpStatus.NOT_FOUND)
+      throw new HttpException(`Driver CPF ${cpf} not found`, HttpStatus.NOT_FOUND);
     }
-   return findMotorista
+   return findMotorista;
   }
 
   public async getMotoristaName(name: string) {
@@ -63,9 +63,9 @@ export class MotoristaService{
       (motorista) => motorista.name.toLowerCase().includes(name.toLowerCase()));
 
     if (findMotorista.length === 0) {
-      throw new HttpException(`Driver ${name} not found`, HttpStatus.NOT_FOUND)
+      throw new HttpException(`Driver ${name} not found`, HttpStatus.NOT_FOUND);
     }
-   return findMotorista
+   return findMotorista;
   }
 
   public async getMotoristaID(id: string) {
@@ -73,7 +73,7 @@ export class MotoristaService{
     const findMotorista = motoristas.find(elemento=> elemento.id === id);
 
     if (!findMotorista) {
-      throw new HttpException(`Driver ID ${id} not found`, HttpStatus.NOT_FOUND)
+      throw new HttpException(`Driver ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
     return findMotorista; 
   }
@@ -81,32 +81,23 @@ export class MotoristaService{
   public async getListaMotoristas(page: number, size: number){
     const indiceInicial = page * size;
     const indiceFinal = indiceInicial + size;
-    console.log(indiceInicial);
     
-    const motoristas = await this.database.getMotoristasBD()
-    console.log("Tam: "+motoristas.length);
-    console.log(motoristas[2]);
-    
+    const motoristas = await this.database.getMotoristasBD();
     
     if (motoristas.length > indiceInicial) {
-      console.log("Entrei");
-      
         if (motoristas.length > indiceFinal) {
-          console.log("Entrou aqui");
-          
           return motoristas.slice(indiceInicial, indiceFinal);
         } else {
           return motoristas.slice(indiceInicial, motoristas.length);
         }
     } else {
-      console.log("Entrei 1");
       return [];
     }
   }
 
   public async updateCadastro(id : string, update : updateMotoristaDto){
     const motoristas = await this.database.getMotoristasBD();
-    const motorista = await this.getMotoristaID(id)
+    const motorista = await this.getMotoristaID(id);
  
     motorista.id = id;
     motorista.name = update.name;
@@ -115,7 +106,7 @@ export class MotoristaService{
  
     const filtrarMotorista = motoristas.filter(elemento=> elemento.id !== id);
     await this.database.gravarListaMotorista(filtrarMotorista);
-    await this.database.salvar(motorista)
+    await this.database.salvar(motorista);
     return motorista;
   }
 
