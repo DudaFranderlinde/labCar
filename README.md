@@ -1,73 +1,310 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# LabCar
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST
+Aplicação desenvolvida para como primeiro projeto do Módulo 2 - DEVinHouse.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Primeiros passos
 
-## Description
+Para instalar as dependencias é preciso executar o comando:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
+```
 $ npm install
 ```
 
-## Running the app
+Rodar aplicação no modo de desenvolvimento. Que ficará exposto em: http://localhost:3000
 
-```bash
-# development
-$ npm run start
-
-# watch mode
+```
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+## Endpoints disponiveis
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+### Listar Motoristas:
+```
+GET: http://localhost:3000/motoristas?name&page=0&size=10
 ```
 
-## Support
+#### Resultado:
+```
+{
+		"id": "9f9f79dc-7628-454c-b12d-fae8a92c9dbc",
+		"status": "ALLOWED",
+		"name": "nameUser",
+		"birthDate": "12/12/1212",
+		"cpf": "000.000.000-00",
+		"licensePlate": "AAA0000",
+		"model": "modelUser"
+	}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Detalhes motorista:
+```
+GET: http://localhost:3000/motoristas/:cpf
+```
 
-## Stay in touch
+#### Resultado:
+```
+{
+	"id": "9f9f79dc-7628-454c-b12d-fae8a92c9dbc",
+	"status": "ALLOWED",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"licensePlate": "AAA0000",
+	"model": "modelUser"
+}
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Criar um motorista:
+```
+POST: http://localhost:3000/motoristas
+Body{
+	"id": "",
+	"status": "ALLOWED",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"licensePlate": "AAA0000",
+	"model": "modelUser"
+}
+```
+#### Resultado:
+```
+{
+	"id": "9f9f79dc-7628-454c-b12d-fae8a92c9dbc",
+	"status": "ALLOWED",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"licensePlate": "AAA0000",
+	"model": "modelUser"
+}
+```
 
-## License
+### Atualizar os dados cadastrais de um motorista:
+```
+PUT: http://localhost:3000/motoristas/:id
+Body{
+	"name": "nameUser",
+	"licensePlate": "AAA0000",
+	"model": "modelUser"
+}
+```
+#### Resultado:
+```
+{
+	"id": "9f9f79dc-7628-454c-b12d-fae8a92c9dbc",
+	"status": "ALLOWED",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"licensePlate": "AAA0000",
+	"model": "modelUser"
+}
+```
 
-Nest is [MIT licensed](LICENSE).
+### Bloquear motorista:
+```
+PATCH: http://localhost:3000/motoristas/:id
+Body{
+	"status": "BLOCKED"
+}
+```
+#### Resultado:
+```
+{
+	"id": "9f9f79dc-7628-454c-b12d-fae8a92c9dbc",
+	"status": "BLOCKED",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"licensePlate": "AAA0000",
+	"model": "modelUser"
+}
+```
+
+### Exclusão de motorista:
+```
+DELETE: http://localhost:3000/motoristas/:id
+```
+#### Resultado:
+```
+{
+	"id": "9f9f79dc-7628-454c-b12d-fae8a92c9dbc",
+	"status": "BLOCKED",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"licensePlate": "AAA0000",
+	"model": "modelUser"
+}
+```
+
+### Listar passageiros:
+```
+GET: http://localhost:3000/passageiros?name&page=0&size=10
+```
+#### Resultado:
+```
+{
+	"id": "",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"address": {
+		"street": "Rua Anitápolis",
+		"number": "45",
+		"neighborhood": "Vorstadt",
+		"city": "Blumenau",
+		"state": "SC"
+	}
+}
+```
+
+
+### Detalhes passageiro:
+```
+GET: http://localhost:3000/passageiros/:cpf
+```
+#### Resultado:
+```
+{
+	"id": "",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"address": {
+		"street": "Rua Anitápolis",
+		"number": "45",
+		"neighborhood": "Vorstadt",
+		"city": "Blumenau",
+		"state": "SC"
+	}
+}
+```
+
+### Criar um passageiro:
+```
+POST: http://localhost:3000/passageiros
+Body{
+	"id": "",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"address": {
+		"street": "Rua Anitápolis",
+		"number": "45",
+		"neighborhood": "Vorstadt",
+		"city": "Blumenau",
+		"state": "SC"
+	}
+}
+```
+#### Resultado:
+```
+{
+	"id": "",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"address": {
+		"street": "Rua Anitápolis",
+		"number": "45",
+		"neighborhood": "Vorstadt",
+		"city": "Blumenau",
+		"state": "SC"
+	}
+}
+```
+
+### Atualizar os dados cadastrais de um passageiro:
+```
+PUT: http://localhost:3000/passageiros/:id
+Body{
+	"name": "nameUser",
+	"address": {
+		"street": "Rua Anitápolis",
+		"number": "45",
+		"neighborhood": "Vorstadt",
+		"city": "Blumenau",
+		"state": "SC"
+	}
+}
+```
+#### Resultado:
+```
+{
+	"id": "",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"address": {
+		"street": "Rua Anitápolis",
+		"number": "45",
+		"neighborhood": "Vorstadt",
+		"city": "Blumenau",
+		"state": "SC"
+	}
+}
+```
+
+### Exclusão de um passageiro:
+```
+DELETE: http://localhost:3000/passageiros/:id
+```
+#### Resultado:
+```
+{
+	"id": "",
+	"name": "nameUser",
+	"birthDate": "dd/mm/yyyy",
+	"cpf": "000.000.000-00",
+	"address": {
+		"street": "Rua Anitápolis",
+		"number": "45",
+		"neighborhood": "Vorstadt",
+		"city": "Blumenau",
+		"state": "SC"
+	}
+}
+```
+
+### Solicitar uma viagem:
+```
+POST: http://localhost:3000/passageiros
+Body{
+	"id": "",
+	"status": "CREATED",
+	"idMotorista": "",
+	"idPassageiro": "2a2aaab2-e68a-4563-b642-5f02ff2f08eb",
+	"origin": "Rua 15 de Novembro, Centro, Blumenau", 
+	"whither": "Rua Anitápolis, Vorstadt, Blumenau"
+}
+```
+#### Resultado:
+```
+{
+	"id": "",
+	"status": "CREATED",
+	"idMotorista": "",
+	"idPassageiro": "2a2aaab2-e68a-4563-b642-5f02ff2f08eb",
+	"origin": "Rua 15 de Novembro, Centro, Blumenau", 
+	"whither": "Rua Anitápolis, Vorstadt, Blumenau"
+}
+```
+
+### Viagens próximas do motorista:
+```
+GET: http://localhost:3000/passageiros/
+```
+#### Resultado:
+```
+{
+	"id": "",
+	"status": "CREATED",
+	"idMotorista": "",
+	"idPassageiro": "2a2aaab2-e68a-4563-b642-5f02ff2f08eb",
+	"origin": "Rua 15 de Novembro, Centro, Blumenau", 
+	"whither": "Rua Anitápolis, Vorstadt, Blumenau"
+}
+```
