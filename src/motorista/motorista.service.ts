@@ -4,10 +4,11 @@ import { Motorista } from "./motorista.entity";
 import {v4 as uuidV4} from 'uuid'
 import { Status } from "./status-motorista.enum";
 import { updateMotoristaDto } from "src/motorista/dto/updateMotoristaDto";
+import { DatabaseViagem } from "src/database/viagem.database";
 
 @Injectable()
 export class MotoristaService{
-  constructor(private database: DatabaseMotorista) {}
+  constructor(private database: DatabaseMotorista, private viagens: DatabaseViagem) {}
 
   public async verificaCpf(cpf: string) {
     const motoristas = await this.database.getMotoristasBD();
@@ -124,6 +125,15 @@ export class MotoristaService{
   }
 
   public async deleteMotorista(id : string){
+    const viagens = await this.viagens.getViagensBD();
+
+      const findViagem = viagens.find(motorista=> motorista.id === id);
+      if (!findViagem) {
+        throw new ConflictException({
+          statusCode: 409,
+          message: 'Motorista is registered on a trip',
+        });
+      }
     const motoristas = await this.database.getMotoristasBD();
     const filtrarMotorista = motoristas.filter(elemento=> elemento.id !== id);
     await this.database.gravarListaMotorista(filtrarMotorista);

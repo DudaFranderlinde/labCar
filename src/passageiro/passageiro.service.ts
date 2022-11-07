@@ -1,12 +1,13 @@
 import { Injectable, HttpException, HttpStatus, ConflictException } from '@nestjs/common'
 import { DatabasePassageiro } from 'src/database/passageiro.database';
+import { DatabaseViagem } from 'src/database/viagem.database';
 import {v4 as uuidV4} from 'uuid'
 import { updatePassageiroDto } from './dto/updatePassageiroDto';
 import { Passageiro } from './passageiro.entity';
 
 @Injectable()
 export class PassageiroService {
-    constructor(private database: DatabasePassageiro) {}
+    constructor(private database: DatabasePassageiro, private viagens: DatabaseViagem) {}
 
     public async verificaCpf(cpf: string) {
       const passageiros = await this.database.getPassageirosBD();
@@ -95,6 +96,16 @@ export class PassageiroService {
     }
 
     public async deletePassageiro(id : string){
+      const viagens = await this.viagens.getViagensBD();
+
+      const findViagem = viagens.find(passageiro=> passageiro.id === id);
+      if (!findViagem) {
+        throw new ConflictException({
+          statusCode: 409,
+          message: 'Passenger is registered on a trip',
+        });
+      }
+
       const passageiros = await this.database.getPassageirosBD();
       const filtrarPassageiro = passageiros.filter(elemento=> elemento.id !== id);
       await this.database.gravarListaPassageiros(filtrarPassageiro);
